@@ -1,10 +1,14 @@
 package com.example.voice_rcd;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -17,7 +21,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -34,7 +37,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	/** Called when the activity is first created. */
 
 	private Button mBtnSend;
-	private TextView mBtnRcd;
+	//private TextView mBtnRcd;
 	private Button mBtnBack;
 	private EditText mEditTextContent;
 	private RelativeLayout mBottom;
@@ -48,7 +51,6 @@ public class MainActivity extends Activity implements OnClickListener {
 	private SoundMeter mSensor;
 	private View rcChat_popup;
 	private LinearLayout del_re;
-	private ImageView chatting_mode_btn, volume;
 	private boolean btn_vocie = false;
 	private int flag = 1;
 	private Handler mHandler = new Handler();
@@ -60,7 +62,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.chat);
-		// Æô¶¯activityÊ±²»×Ô¶¯µ¯³öÈí¼üÅÌ
+		// ï¿½ï¿½ï¿½ï¿½activityÊ±ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		getWindow().setSoftInputMode(
 				WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 		initView();
@@ -68,63 +70,26 @@ public class MainActivity extends Activity implements OnClickListener {
 		initData();
 		
 		openDataBase();
-		addData();
+	
 	}
 
 	public void initView() {
 		mListView = (ListView) findViewById(R.id.listview);
 		mBtnSend = (Button) findViewById(R.id.btn_send);
-		mBtnRcd = (TextView) findViewById(R.id.btn_rcd);
+
 		mBtnSend.setOnClickListener(this);
 		mBtnBack = (Button) findViewById(R.id.btn_back);
 		mBottom = (RelativeLayout) findViewById(R.id.btn_bottom);
 		mBtnBack.setOnClickListener(this);
-		chatting_mode_btn = (ImageView) this.findViewById(R.id.ivPopUp);
-		volume = (ImageView) this.findViewById(R.id.volume);
-		rcChat_popup = this.findViewById(R.id.rcChat_popup);
-		img1 = (ImageView) this.findViewById(R.id.img1);
-		sc_img1 = (ImageView) this.findViewById(R.id.sc_img1);
-		del_re = (LinearLayout) this.findViewById(R.id.del_re);
-		voice_rcd_hint_rcding = (LinearLayout) this
-				.findViewById(R.id.voice_rcd_hint_rcding);
-		voice_rcd_hint_loading = (LinearLayout) this
-				.findViewById(R.id.voice_rcd_hint_loading);
-		voice_rcd_hint_tooshort = (LinearLayout) this
-				.findViewById(R.id.voice_rcd_hint_tooshort);
+	
+
 		mSensor = new SoundMeter();
 		mEditTextContent = (EditText) findViewById(R.id.et_sendmessage);
 		
-		//ÓïÒôÎÄ×ÖÇĞ»»°´Å¥
-		chatting_mode_btn.setOnClickListener(new OnClickListener() {
 
-			public void onClick(View v) {
-
-				if (btn_vocie) {
-					mBtnRcd.setVisibility(View.GONE);
-					mBottom.setVisibility(View.VISIBLE);
-					btn_vocie = false;
-					chatting_mode_btn
-							.setImageResource(R.drawable.chatting_setmode_msg_btn);
-
-				} else {
-					mBtnRcd.setVisibility(View.VISIBLE);
-					mBottom.setVisibility(View.GONE);
-					chatting_mode_btn
-							.setImageResource(R.drawable.chatting_setmode_voice_btn);
-					btn_vocie = true;
-				}
-			}
-		});
-		mBtnRcd.setOnTouchListener(new OnTouchListener() {
-			
-			public boolean onTouch(View v, MotionEvent event) {
-				//°´ÏÂÓïÒôÂ¼ÖÆ°´Å¥Ê±·µ»ØfalseÖ´ĞĞ¸¸ÀàOnTouch
-				return false;
-			}
-		});
 	}
 
-	private String[] msgArray = new String[] { "ÓĞÈË¾ÍÓĞ¶÷Ô¹","ÓĞ¶÷Ô¹¾ÍÓĞ½­ºş","ÈË¾ÍÊÇ½­ºş","ÄãÔõÃ´ÍË³ö£¿ ","ÉúÃüÖĞ³äÂúÁËÇÉºÏ","Á½ÌõÆ½ĞĞÏßÒ²»áÓĞÏà½»µÄÒ»Ìì¡£"};
+	private String[] msgArray = new String[] { "11111","1111","111","11111 ","1111","1111"};
 
 	private String[] dataArray = new String[] { "2012-10-31 18:00",
 			"2012-10-31 18:10", "2012-10-31 18:11", "2012-10-31 18:20",
@@ -136,10 +101,10 @@ public class MainActivity extends Activity implements OnClickListener {
 			ChatMsgEntity entity = new ChatMsgEntity();
 			entity.setDate(dataArray[i]);
 			if (i % 2 == 0) {
-				entity.setName("°×¸»ÃÀ");
+				entity.setName("ï¿½×¸ï¿½ï¿½ï¿½");
 				entity.setMsgType(true);
 			} else {
-				entity.setName("¸ß¸»Ë§");
+				entity.setName("ï¿½ß¸ï¿½Ë§");
 				entity.setMsgType(false);
 			}
 
@@ -169,14 +134,14 @@ public class MainActivity extends Activity implements OnClickListener {
 		if (contString.length() > 0) {
 			ChatMsgEntity entity = new ChatMsgEntity();
 			entity.setDate(getDate());
-			entity.setName("¸ß¸»Ë§");
+			entity.setName("æˆ‘");
 			entity.setMsgType(false);
 			entity.setText(contString);
 
 			
 			ChatMsgEntity entity1 = new ChatMsgEntity();
 			entity1.setDate(getDate());
-			entity1.setName("»úÆ÷ÈË");
+			entity1.setName("æœºå™¨äºº");
 			entity1.setMsgType(true);
 			String tmp = select(contString);
 			if(tmp!=null){
@@ -186,6 +151,7 @@ public class MainActivity extends Activity implements OnClickListener {
 			}
 			
 		  //  entity1.setText("sorry didn't find");
+		   
 			mDataArrays.add(entity);
 			mDataArrays.add(entity1);
 			
@@ -215,226 +181,77 @@ public class MainActivity extends Activity implements OnClickListener {
 		return sbBuffer.toString();
 	}
 
-	//°´ÏÂÓïÒôÂ¼ÖÆ°´Å¥Ê±
-	@Override
-	public boolean onTouchEvent(MotionEvent event) {
 
-		if (!Environment.getExternalStorageDirectory().exists()) {
-			Toast.makeText(this, "No SDCard", Toast.LENGTH_LONG).show();
-			return false;
-		}
-
-		if (btn_vocie) {
-			System.out.println("1");
-			int[] location = new int[2];
-			mBtnRcd.getLocationInWindow(location); // »ñÈ¡ÔÚµ±Ç°´°¿ÚÄÚµÄ¾ø¶Ô×ø±ê
-			int btn_rc_Y = location[1];
-			int btn_rc_X = location[0];
-			int[] del_location = new int[2];
-			del_re.getLocationInWindow(del_location);
-			int del_Y = del_location[1];
-			int del_x = del_location[0];
-			if (event.getAction() == MotionEvent.ACTION_DOWN && flag == 1) {
-				if (!Environment.getExternalStorageDirectory().exists()) {
-					Toast.makeText(this, "No SDCard", Toast.LENGTH_LONG).show();
-					return false;
-				}
-				System.out.println("2");
-				if (event.getY() > btn_rc_Y && event.getX() > btn_rc_X) {//ÅĞ¶ÏÊÖÊÆ°´ÏÂµÄÎ»ÖÃÊÇ·ñÊÇÓïÒôÂ¼ÖÆ°´Å¥µÄ·¶Î§ÄÚ
-					System.out.println("3");
-					mBtnRcd.setBackgroundResource(R.drawable.voice_rcd_btn_pressed);
-					rcChat_popup.setVisibility(View.VISIBLE);
-					voice_rcd_hint_loading.setVisibility(View.VISIBLE);
-					voice_rcd_hint_rcding.setVisibility(View.GONE);
-					voice_rcd_hint_tooshort.setVisibility(View.GONE);
-					mHandler.postDelayed(new Runnable() {
-						public void run() {
-							if (!isShosrt) {
-								voice_rcd_hint_loading.setVisibility(View.GONE);
-								voice_rcd_hint_rcding
-										.setVisibility(View.VISIBLE);
-							}
-						}
-					}, 300);
-					img1.setVisibility(View.VISIBLE);
-					del_re.setVisibility(View.GONE);
-					startVoiceT = SystemClock.currentThreadTimeMillis();
-					voiceName = startVoiceT + ".amr";
-					start(voiceName);
-					flag = 2;
-				}
-			} else if (event.getAction() == MotionEvent.ACTION_UP && flag == 2) {//ËÉ¿ªÊÖÊÆÊ±Ö´ĞĞÂ¼ÖÆÍê³É
-				System.out.println("4");
-				mBtnRcd.setBackgroundResource(R.drawable.voice_rcd_btn_nor);
-				if (event.getY() >= del_Y
-						&& event.getY() <= del_Y + del_re.getHeight()
-						&& event.getX() >= del_x
-						&& event.getX() <= del_x + del_re.getWidth()) {
-					rcChat_popup.setVisibility(View.GONE);
-					img1.setVisibility(View.VISIBLE);
-					del_re.setVisibility(View.GONE);
-					stop();
-					flag = 1;
-					File file = new File(android.os.Environment.getExternalStorageDirectory()+"/"
-									+ voiceName);
-					if (file.exists()) {
-						file.delete();
-					}
-				} else {
-
-					voice_rcd_hint_rcding.setVisibility(View.GONE);
-					stop();
-					endVoiceT = SystemClock.currentThreadTimeMillis();
-					flag = 1;
-					int time = (int) ((endVoiceT - startVoiceT) / 1000);
-					if (time < 1) {
-						isShosrt = true;
-						voice_rcd_hint_loading.setVisibility(View.GONE);
-						voice_rcd_hint_rcding.setVisibility(View.GONE);
-						voice_rcd_hint_tooshort.setVisibility(View.VISIBLE);
-						mHandler.postDelayed(new Runnable() {
-							public void run() {
-								voice_rcd_hint_tooshort
-										.setVisibility(View.GONE);
-								rcChat_popup.setVisibility(View.GONE);
-								isShosrt = false;
-							}
-						}, 500);
-						return false;
-					}
-					ChatMsgEntity entity = new ChatMsgEntity();
-					entity.setDate(getDate());
-					entity.setName("¸ß¸»Ë§");
-					entity.setMsgType(false);
-					entity.setTime(time+"\"");
-					entity.setText(voiceName);
-					mDataArrays.add(entity);
-					mAdapter.notifyDataSetChanged();
-					mListView.setSelection(mListView.getCount() - 1);
-					rcChat_popup.setVisibility(View.GONE);
-
-				}
-			}
-			if (event.getY() < btn_rc_Y) {//ÊÖÊÆ°´ÏÂµÄÎ»ÖÃ²»ÔÚÓïÒôÂ¼ÖÆ°´Å¥µÄ·¶Î§ÄÚ
-				System.out.println("5");
-				Animation mLitteAnimation = AnimationUtils.loadAnimation(this,
-						R.anim.cancel_rc);
-				Animation mBigAnimation = AnimationUtils.loadAnimation(this,
-						R.anim.cancel_rc2);
-				img1.setVisibility(View.GONE);
-				del_re.setVisibility(View.VISIBLE);
-				del_re.setBackgroundResource(R.drawable.voice_rcd_cancel_bg);
-				if (event.getY() >= del_Y
-						&& event.getY() <= del_Y + del_re.getHeight()
-						&& event.getX() >= del_x
-						&& event.getX() <= del_x + del_re.getWidth()) {
-					del_re.setBackgroundResource(R.drawable.voice_rcd_cancel_bg_focused);
-					sc_img1.startAnimation(mLitteAnimation);
-					sc_img1.startAnimation(mBigAnimation);
-				}
-			} else {
-
-				img1.setVisibility(View.VISIBLE);
-				del_re.setVisibility(View.GONE);
-				del_re.setBackgroundResource(0);
-			}
-		}
-		return super.onTouchEvent(event);
-	}
-
-	private static final int POLL_INTERVAL = 300;
-
-	private Runnable mSleepTask = new Runnable() {
-		public void run() {
-			stop();
-		}
-	};
-	private Runnable mPollTask = new Runnable() {
-		public void run() {
-			double amp = mSensor.getAmplitude();
-			updateDisplay(amp);
-			mHandler.postDelayed(mPollTask, POLL_INTERVAL);
-
-		}
-	};
-
-	private void start(String name) {
-		mSensor.start(name);
-		mHandler.postDelayed(mPollTask, POLL_INTERVAL);
-	}
-
-	private void stop() {
-		mHandler.removeCallbacks(mSleepTask);
-		mHandler.removeCallbacks(mPollTask);
-		mSensor.stop();
-		volume.setImageResource(R.drawable.amp1);
-	}
-
-	private void updateDisplay(double signalEMA) {
-		
-		switch ((int) signalEMA) {
-		case 0:
-		case 1:
-			volume.setImageResource(R.drawable.amp1);
-			break;
-		case 2:
-		case 3:
-			volume.setImageResource(R.drawable.amp2);
-			
-			break;
-		case 4:
-		case 5:
-			volume.setImageResource(R.drawable.amp3);
-			break;
-		case 6:
-		case 7:
-			volume.setImageResource(R.drawable.amp4);
-			break;
-		case 8:
-		case 9:
-			volume.setImageResource(R.drawable.amp5);
-			break;
-		case 10:
-		case 11:
-			volume.setImageResource(R.drawable.amp6);
-			break;
-		default:
-			volume.setImageResource(R.drawable.amp7);
-			break;
-		}
-	}
+	
 
 	private void openDataBase() {
-		mSQLiteDataBase = this.openOrCreateDatabase("examples.db",
+		mSQLiteDataBase = this.openOrCreateDatabase("intellegentchat.db",
 				MODE_PRIVATE, null);
-
-		String CREATE_TABLE = "create table if not exists table1 (_id INTEGER PRIMARY KEY,input_word VARCHAR,target_word TEXT);";
-		mSQLiteDataBase.execSQL(CREATE_TABLE);
+		
+		Cursor cursor = mSQLiteDataBase.rawQuery("select name from sqlite_master where type='table' AND name='answer';", null);
+		
+		if(!cursor.moveToNext()){
+			String CREATE_TABLE = "create table answer(_id INTEGER PRIMARY KEY,input_word VARCHAR,target_word TEXT,is_need_time SMALLINT,from_time TIME,to_time TIME);";
+			mSQLiteDataBase.execSQL(CREATE_TABLE);
+			addData();
+		}
+	//	mSQLiteDataBase.close();
+	//	addData();
 	}
 	private void addData() {
 
-		/* Ìí¼Ó·½Ê½Ò» */
+		/* ï¿½ï¿½Ó·ï¿½Ê½Ò» */
+		
 		ContentValues cv = new ContentValues();
 		cv.put("input_word", "morning");
-		cv.put("target_word", "¤ª¤Ï¤è¤¦¤´¤¶¤¤¤Ş¤¹£¡");
-		mSQLiteDataBase.insert("table1", null, cv);
+		cv.put("target_word", "ãŠã¯ã‚ˆã†ã”ã–ã„ã¾ã™ï¼");
+		cv.put("is_need_time", "1");
+		cv.put("from_time", "6:01:00");
+		cv.put("to_time", "10:00:00");
+		
+		mSQLiteDataBase.insert("answer", null, cv);
+		
+		mSQLiteDataBase.execSQL("Insert INTO answer (input_word,target_word,is_need_time,from_time,to_time) values('lunch','ãŠæ˜¼æ™‚é–“ï¼','1','10:01:00','14:00:00')");
+		mSQLiteDataBase.execSQL("Insert INTO answer (input_word,target_word,is_need_time,from_time,to_time) values('afternoon','åˆå¾Œã®ä»•äº‹ã€é ‘å¼µã£ã¦ã­ã€‚','1','14:01:00','17:00:00')");
+		mSQLiteDataBase.execSQL("Insert INTO answer (input_word,target_word,is_need_time,from_time,to_time) values('dinner','æ™©ã”é£¯ã¯ä½•ã«ã—ã‚ˆã†ã‹ã€‚','1','17:01:00','21:00:00')");
+		mSQLiteDataBase.execSQL("Insert INTO answer (input_word,target_word,is_need_time,from_time,to_time) values('good dream','ãŠã‚„ã™ã¿ãªã•ã„ï¼','1','21:01:00','23:00:00')");
+		
+		
 
-		/* Ìí¼Ó·½Ê½¶ş */
-		/*
-		String INSERT_DATA = "INSERT INTO table1 (name,pswd) values ('" + name
-				+ "2','" + pswd + "2')";
-		mSQLiteDataBase.execSQL(INSERT_DATA);
-        */
-		/* ¶¯Ì¬¸üĞÂÒ³ÃæÏÔÊ¾ */
+	
 	}
+	@SuppressLint("SimpleDateFormat")
 	private String select(String que){
 		String ans = null;
-		
-		Cursor c = mSQLiteDataBase.rawQuery("SELECT * FROM table1 WHERE input_word = ?", new String[]{que});
+	//	mSQLiteDataBase = this.openOrCreateDatabase("intellegentchat.db",
+	//			MODE_PRIVATE, null);
+		Cursor c = mSQLiteDataBase.rawQuery("SELECT * FROM answer WHERE input_word = ?", new String[]{que});
 		if(c.moveToNext()){
-			ans = c.getString(c.getColumnIndex("target_word"));
+			if(c.getString(c.getColumnIndex("is_need_time")).equals("1")){
+				DateFormat  dfs = new SimpleDateFormat("HH:mm:ss");
+				Calendar canlendar = Calendar.getInstance();
+				String hour = String.valueOf(canlendar.get(Calendar.HOUR_OF_DAY));
+				String mins = String.valueOf(canlendar.get(Calendar.MINUTE));
+				String sec = String.valueOf(canlendar.get(Calendar.SECOND));
+				
+				try{
+				      Date begin = dfs.parse(c.getString(c.getColumnIndex("from_time")));
+				      Date end = dfs.parse(c.getString(c.getColumnIndex("to_time")));
+				      Date time = dfs.parse(hour+":"+mins+":"+sec);
+				 //     Toast.makeText(this, time.toString(), Toast.LENGTH_LONG).show();
+				      if(time.after(begin)&&time.before(end)){
+				    	  ans = c.getString(c.getColumnIndex("target_word"));
+				      }
+				}catch(Exception e){
+				//	Toast.makeText(this, "hello world", Toast.LENGTH_LONG).show();
+				}    
+			}else{
+				ans = c.getString(c.getColumnIndex("target_word"));
+			}
 		}
+		c.close();
+	//	mSQLiteDataBase.close();
 		return ans;
 	}
-    
+   
 }

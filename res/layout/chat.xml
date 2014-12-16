@@ -42,21 +42,14 @@
     </RelativeLayout>
 
     <!-- 底部按钮以及 编辑框-->
-    <RelativeLayout
+   <RelativeLayout
         android:id="@+id/rl_bottom"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@drawable/chat_footer_bg" >
 
-        <ImageView
-            android:id="@+id/ivPopUp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dip"
-            android:src="@drawable/chatting_setmode_msg_btn" />
+    
 
         <RelativeLayout
             android:id="@+id/btn_bottom"
@@ -89,19 +82,7 @@
                 android:textSize="18sp" />
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/btn_rcd"
-            android:layout_width="fill_parent"
-            android:layout_height="40dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_toRightOf="@+id/ivPopUp"
-            android:background="@drawable/chat_send_btn"
-            android:gravity="center"
-            android:text="按住说话"
-            android:visibility="gone" />
+    
     </RelativeLayout>
     <!-- 聊天内容 listview-->
     <ListView
@@ -115,19 +96,5 @@
         android:dividerHeight="5dp"
         android:scrollbarStyle="outsideOverlay"
         android:stackFromBottom="true" />
-    <!-- 录音显示UI层-->
-    <LinearLayout
-        android:id="@+id/rcChat_popup"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:gravity="center"
-        android:visibility="gone" >
-
-        <include
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            layout="@layout/voice_rcd_hint_window" />
-    </LinearLayout>
 
 </RelativeLayout>
